@@ -307,19 +307,30 @@ function menang() {
   // Sinkronisasi ke Firestore jika login
   if (window.appUser && window.appUserData) {
     const userRef = window.doc(window.db, 'users', window.appUser.uid);
+    let updates = {};
+    const rewardLower = reward.toLowerCase();
     
     // Tambah Koleksi
     if (!window.appUserData.collections) window.appUserData.collections = [];
-    if (!window.appUserData.collections.includes(reward)) {
-      window.appUserData.collections.push(reward);
-      window.updateDoc(userRef, { collections: window.arrayUnion(reward) });
+    if (!window.appUserData.collections.includes(rewardLower) && !window.appUserData.collections.includes(reward)) {
+      window.appUserData.collections.push(rewardLower);
+      updates.collections = window.arrayUnion(rewardLower);
     }
 
     // Cek Pencapaian Pertama
     if (!window.appUserData.achievements) window.appUserData.achievements = [];
     if (!window.appUserData.achievements.includes('first_discovery')) {
       window.appUserData.achievements.push('first_discovery');
-      window.updateDoc(userRef, { achievements: window.arrayUnion('first_discovery') });
+      updates.achievements = window.arrayUnion('first_discovery');
+    }
+
+    if (Object.keys(updates).length > 0) {
+      window.updateDoc(userRef, updates)
+        .then(() => console.log('Progres tersimpan di Firebase'))
+        .catch(err => {
+          console.error('Gagal menyimpan progres ke Firebase:', err);
+          alert('Gagal menyimpan progres ke Firebase: ' + err.message);
+        });
     }
   }
 
@@ -327,11 +338,16 @@ function menang() {
   document.getElementById('end-title').textContent = 'CONGRATULATIONS!';
   document.getElementById('end-title').style.background = 'linear-gradient(135deg, #fbbf24, #f59e0b)';
   document.getElementById('end-title').style.webkitBackgroundClip = 'text';
+  
+  const saveStatusText = window.appUser ? 
+    `<span style="font-size:0.75rem; color:rgba(255,255,255,0.5);">Planet ini telah ditambahkan ke KOLEKSI Anda.</span>` : 
+    `<span style="font-size:0.75rem; color:#ef4444; font-weight:bold;">Planet TIDAK disimpan karena Anda bermain sebagai Guest. Silakan Login Google dulu!</span>`;
+
   document.getElementById('end-desc').innerHTML = `Luar Biasa, ${userName}! Anda telah menaklukkan seluruh kuis <strong>ASTRO QUEST</strong>!<br><br>
     <div style="background:rgba(251,191,36,0.1); padding:15px; border-radius:12px; border:1px solid rgba(251,191,36,0.2);">
       <span class="material-symbols-rounded" style="color:#fbbf24; display:block; font-size:2rem; margin-bottom:10px;">auto_awesome</span>
       REWARD UNLOCKED: <strong>Planet ${reward}</strong><br>
-      <span style="font-size:0.75rem; color:rgba(255,255,255,0.5);">Planet ini telah ditambahkan ke KOLEKSI Anda.</span>
+      ${saveStatusText}
     </div>`;
   
   const grid = document.getElementById('end-koleksi');

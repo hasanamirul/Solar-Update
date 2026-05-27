@@ -1,95 +1,134 @@
-# 3D Solar System in THREE.js
+# 🚀 Astro Quest: Penjelajah Antariksa 3D
 
-Welcome to the **3D Solar System** project, a dynamic and interactive simulation of our solar system created using THREE.js and the Vite framework. This project showcases various advanced features and effects to provide an immersive experience of the celestial bodies in our solar system. The project is fully created by Karol Fryc.
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![Three.js](https://img.shields.io/badge/Three.js-black?logo=three.js&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-B73BFE?logo=vite&logoColor=white)
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?logo=css3&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black)
 
-Overview available at: [https://w21030911.nuwebspace.co.uk/graphics/assessment/](https://w21030911.nuwebspace.co.uk/graphics/assessment/)
+**Astro Quest** adalah aplikasi simulasi tata surya 3D interaktif yang dibangun menggunakan **Three.js** dan **Vite**. Tidak hanya sekadar melihat planet, aplikasi ini dilengkapi dengan fitur edukasi seperti kuis antariksa interaktif, koleksi planet, pencapaian pemain, hingga fitur **Camera AR** untuk menggabungkan simulasi 3D dengan dunia nyata!
 
-![Solar_System](images/solar_system.png)
+<div align="center">
+  <img src="images/solar_system.png" alt="Solar System Overview" width="800"/>
+</div>
 
-![Earth](images/earthnew.png)
+---
 
-![Mercury](images/mercury.png)
+## ✨ Fitur Utama
 
-![Mars](images/mars.png)
+- 🌍 **Simulasi 3D Realistis**: Jelajahi Matahari, 8 planet, bulan (termasuk satelit seperti Phobos dan Deimos), dan sabuk asteroid dengan rotasi serta orbit yang dihitung secara matematis.
+- 📸 **Mode Camera AR (Augmented Reality)**: Gabungkan model tata surya 3D yang interaktif langsung dengan tangkapan kamera perangkat Anda!
+- 🎮 **Kuis Antariksa Edukatif**: Uji pengetahuan Anda tentang tata surya. Jawab pertanyaan dengan benar untuk mendapatkan *Poin* dan *Koleksi Planet*!
+- 🏆 **Koleksi & Pencapaian**: Simpan koleksi planet 3D yang telah Anda menangkan dari Kuis. Dilengkapi dengan sistem penyimpanan persisten (*LocalStorage* / *Firebase Database*).
+- ⚙️ **Kontrol Interaktif**: Atur kecepatan orbit, intensitas rotasi, dan cahaya matahari secara *real-time*.
+- 🌌 **Visual Tingkat Lanjut**: Efek pasca-pemrosesan (*Post-Processing*) seperti *Bloom* (Cahaya Matahari), bayangan (*Shadows*), tekstur *bump*, *ShaderMaterial* untuk awan bumi yang bergerak, dan cincin planet.
 
-## Features
+---
 
-### Standard Setup
-- **Scene, Camera, Renderer**: Basic setup for rendering 3D scenes using THREE.js.
-- **Controls**: Interactive controls for navigating the 3D space.
-- **Texture Loaders**: Efficient loading of textures for planets, moons, and other objects.
+## 🛠️ Teknologi yang Digunakan
 
-### Postprocessing Effects
-- **BloomPass**: Adds a glowing effect to the Sun.
-- **OutlinePass**: Highlights planets with a white outline when hovered over.
-- **EffectComposer**: Manages and combines all postprocessing effects for rendering.
+- **Frontend**: HTML5, CSS3, JavaScript (ES6+)
+- **3D Engine**: [Three.js](https://threejs.org/)
+- **Build Tool**: [Vite](https://vitejs.dev/)
+- **Autentikasi & Database**: Firebase Authentication, Firebase Realtime Database / LocalStorage
+- **Deployment**: Vercel / GitHub Pages
+- **Fitur Kamera**: WebRTC MediaDevices API
 
-### Star Background
-- A realistic starry sky that provides a beautiful backdrop for the solar system.
+---
 
-### Interactive Controls
-- **dat.GUI**: Allows users to adjust parameters such as orbit speed and the intensity of the Sun's glow.
+## 📁 Struktur Direktori
 
-### Lighting
-- **AmbientLight**: Provides soft lighting throughout the scene.
-- **PointLight**: Positioned at the center of the Sun to cast realistic shadows.
+```text
+📦 Astro Quest (Solar-System)
+┣ 📂 public/
+┃ ┣ 📂 images/            # Tekstur planet, satelit, dan background
+┃ ┗ 📂 models/            # Model 3D (jika ada, e.g., asteroid/satelit non-bulat)
+┣ 📂 src/
+┃ ┣ 📜 index.html         # Halaman utama aplikasi
+┃ ┣ 📜 style.css          # Styling utama (Animasi, UI Simulasi AR)
+┃ ┣ 📜 misi.css           # Styling untuk Panel Kuis, Koleksi, & Autentikasi
+┃ ┣ 📜 script.js          # Logika Three.js, Camera AR, & UI Interaktif
+┃ ┗ 📜 misi.js            # Logika Kuis, Algoritma Koleksi, Database & Firebase
+┣ 📜 package.json         # Konfigurasi dependensi npm
+┣ 📜 vite.config.js       # Konfigurasi bundler Vite
+┣ 📜 JALANKAN.bat         # Script otomatis jalankan server lokal (Windows)
+┣ 📜 NGROK_JALANKAN.bat   # Script untuk public tunneling
+┣ 📜 FORCE_PUSH.bat       # Script sinkronisasi paksa ke GitHub
+┗ 📜 readme.md            # Dokumentasi repositori ini
+```
 
-### Detailed Planet Creation
-- **Attributes**: Size, position, tilt, texture, bump material, rings, and atmospheres.
-- **Moons**: Includes moons with realistic textures and orbits.
-- **Special Materials**: Earth’s ShaderMaterial for day/night transitions and moving clouds.
-- **Non-Spherical Moons**: Phobos and Deimos are modeled from 3D objects for realism.
+---
 
-### Realistic Orbits and Rotations
-- Planets and moons orbit the Sun and rotate on their axes with scaled distances and speeds.
-- Scaled sizes for better visual representation: Mercury, Venus, Earth, Mars, and Pluto are at actual scale, while larger planets are scaled down for balance.
+## 🚀 Cara Menjalankan Aplikasi Secara Lokal
 
-### Shadows
-- Realistic shadow casting from the PointLight at the Sun’s center.
+Anda bisa menjalankan game ini di komputer lokal dengan langkah-langkah berikut:
 
-### Asteroid Belts
-- **Procedurally Generated**: 1000 asteroids for the belt between Mars and Jupiter, 3000 for the Kuiper belt.
-- **Performance Optimization**: Simplified textures to ensure high performance.
+### Prasyarat
+- [Node.js](https://nodejs.org/) terinstal di komputer Anda.
+- Git untuk melakukan *clone* repository.
 
-### Select Feature
-- **Hover Effect**: White outline around planets when hovered.
-- **Zoom In**: Camera zooms in and displays planet details on click.
-- **Zoom Out**: Returns to default view on closing the pop-up.
+### Instalasi & Menjalankan (Windows)
+1. **Clone repositori**:
+   ```sh
+   git clone https://github.com/hasanamirul/Solar-System.git
+   cd Solar-System
+   ```
+2. **Jalankan Aplikasi dengan `JALANKAN.bat`**:
+   Cukup klik dua kali (*double click*) file **`JALANKAN.bat`**. Skrip ini akan secara otomatis:
+   - Menginstal semua dependensi npm (`npm install`).
+   - Menjalankan server lokal Vite.
+   - Membuka browser default secara otomatis di `http://localhost:5173`.
 
-## Resources
-3D objects and textures were sourced from the following free repositories:
-- [NASA 3D Resources](https://nasa3d.arc.nasa.gov/images)
-- [Solar System Scope Textures](https://www.solarsystemscope.com/textures/)
-- [Planet Pixel Emporium](https://planetpixelemporium.com/index.php)
-- [TurboSquid](https://www.turbosquid.com/)
+> **Alternatif Manual (Mac/Linux)**:
+> ```sh
+> npm install
+> npm run dev
+> ```
 
-## Installation and Setup
+---
 
-1.  **Clone the repository**:
-    ```sh
-    git clone https://github.com/your-username/3d-solar-system.git
-    ```
-2.  **Install dependencies**:
-    ```sh
-    npm install
-    ```
-3.  **Run Development Server**:
-    Klik dua kali file `JALANKAN.bat` atau jalankan `npm run dev`.
-4.  **Run with Ngrok (Public Access)**:
-    Klik dua kali file `NGROK_JALANKAN.bat`.
+## 🌐 Menjalankan Secara Publik (Ngrok)
 
-## Setup Ngrok
+Jika Anda ingin membagikan akses sementara atau menguji **Camera AR** di perangkat HP Anda:
+1. Daftar dan dapatkan *Authtoken* gratis di [ngrok.com](https://dashboard.ngrok.com).
+2. Download file `ngrok.exe` dan letakkan di dalam folder repositori ini.
+3. Jalankan konfigurasi token di terminal:
+   ```cmd
+   ngrok config add-authtoken <TOKEN_ANDA>
+   ```
+4. Klik dua kali **`NGROK_JALANKAN.bat`**. Link `https://xxxx.ngrok-free.app` akan muncul dan siap digunakan di *smartphone* Anda.
 
-1.  Dapatkan **Authtoken** gratis di [ngrok.com](https://dashboard.ngrok.com).
-2.  Daftarkan token Anda sekali saja di terminal:
-    ```cmd
-    ngrok config add-authtoken <TOKEN_ANDA>
-    ```
-3.  Letakkan file `ngrok.exe` di folder utama proyek ini.
-4.  Jalankan `NGROK_JALANKAN.bat` untuk mendapatkan link publik otomatis.
+---
 
-## License
+## 🕹️ Panduan Penggunaan
 
-This project is licensed under the [MIT License](./LICENSE).
+- **Navigasi 3D**:
+  - `Klik Kiri & Geser (Mouse)` / `Sentuh & Geser (Layar Sentuh)`: Memutar kamera mengelilingi tata surya.
+  - `Scroll (Mouse)` / `Cubit (Layar Sentuh)`: Memperbesar (*Zoom In*) atau Memperkecil (*Zoom Out*).
+- **Info Planet**: Klik pada planet mana saja untuk melakukan *zoom* otomatis dan melihat panel informasi spesifik planet (Jari-jari, Suhu, Jarak dari Matahari, dll).
+- **Camera AR**: Klik tombol **Kamera AR** di dalam simulasi untuk menghidupkan kamera perangkat, seolah tata surya berada di ruangan Anda!
+- **Kuis & Koleksi**:
+  - Login dengan akun Google (atau akses sebagai Guest).
+  - Mulai sesi kuis untuk memenangkan planet 3D.
+  - Buka tab "Koleksi Saya" untuk berinteraksi dengan model 3D planet yang sudah Anda kumpulkan.
 
-Feel free to contribute, suggest improvements, or use this project as a foundation for your own THREE.js experiments. Happy exploring!
+---
+
+## 🤝 Kontribusi
+
+Aplikasi ini bersifat *Open Source*. Jika Anda ingin menambahkan fitur baru, memperbaiki *bug*, atau meningkatkan kualitas model 3D:
+1. Lakukan *Fork* repositori ini.
+2. Buat *branch* baru: `git checkout -b fitur-keren-anda`
+3. Lakukan *Commit*: `git commit -m 'Menambahkan fitur keren'`
+4. Lakukan *Push*: `git push origin fitur-keren-anda`
+5. Buat **Pull Request**!
+
+---
+
+## 📄 Lisensi
+
+Proyek ini dilisensikan di bawah [MIT License](LICENSE). Anda bebas menggunakan, memodifikasi, dan mendistribusikan proyek ini untuk tujuan pribadi maupun komersial dengan tetap menyertakan atribut *copyright* asli.
+
+---
+*Dibuat dengan ❤️ untuk mengeksplorasi luasnya alam semesta dari layar perangkat Anda.*

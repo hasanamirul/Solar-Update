@@ -12,7 +12,7 @@
   <style>
     /* Fail-safe positioning for critical UI panels */
     #kontrol-panel { position: fixed !important; top: 25px !important; right: 25px !important; z-index: 1000 !important; }
-    #info-planet { position: fixed !important; left: 30px !important; top: 50% !important; transform: translateY(-50%) !important; z-index: 1000 !important; }
+    #info-planet { position: fixed !important; left: 30px !important; top: 50% !important; transform: translateY(-50%) !important; z-index: 10000 !important; }
     @media (max-width: 900px) {
       #kontrol-panel { top: auto !important; bottom: 20px !important; right: 15px !important; left: 15px !important; width: auto !important; }
       #info-planet { left: 10px !important; right: 10px !important; top: auto !important; bottom: 20px !important; width: auto !important; transform: none !important; }
@@ -172,14 +172,14 @@
 <div id="btn-camera-ar-wrapper">
   <button id="btn-camera-ar" onclick="aktifkanCameraAR()" title="Aktifkan Camera AR">
     <span class="material-symbols-rounded">photo_camera</span>
-    <span class="btn-camera-ar-label">Camera AR</span>
+    <span class="btn-camera-ar-label">Kamera AR</span>
   </button>
 </div>
 
 <!-- ===== BUTTON KEMBALI KE JELAJAH AR ===== -->
 <button id="btn-kembali-jelajah" onclick="nonaktifkanCameraAR()" title="Kembali ke Jelajah AR">
   <span class="material-symbols-rounded">arrow_back</span>
-  <span>Kembali ke Jelajah AR</span>
+  <span>Kembali Jelajah AR</span>
 </button>
 
 <!-- ===== TRANSITION OVERLAY CAMERA AR ===== -->
@@ -238,7 +238,7 @@
       <div class="collection-list-wrapper">
         <div class="achievement-card">
           <div class="user-info">
-            <div class="user-name">Guest Account</div>
+            <div class="user-name" id="koleksi-user-name">Guest Account</div>
             <div class="user-tier">Solar Explorer</div>
           </div>
         </div>
@@ -247,7 +247,7 @@
         </div>
       </div>
       <div id="collection-preview" style="flex: 1.5; background: rgba(0,0,0,0.3); border-radius: 20px; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.1);">
-        <div id="planet-canvas-container" style="width: 100%; height: 60%;"></div>
+        <div id="planet-canvas-container" style="width: 100%; height: 60%; display: flex; align-items: center; justify-content: center; margin-top: 20px;"></div>
         <div id="planet-insight" style="padding: 20px; text-align: center;">
           <h3 id="preview-name" style="margin: 0; color: #fff; font-family: 'Orbitron';">Pilih Planet</h3>
           <p id="preview-desc" style="font-size: 0.85rem; color: rgba(255,255,255,0.6); margin-top: 10px;">Klik salah satu koleksi untuk melihat detail 3D.</p>

@@ -12,8 +12,6 @@ import { OutlinePass } from 'three/addons/postprocessing/OutlinePass.js';
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
 import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut, updateProfile } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js';
 import { getAnalytics } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-analytics.js';
-import { getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
-
 // Konfigurasi Firebase Anda
 const firebaseConfig = {
   apiKey: "AIzaSyDp8ODPNTzr8W3MRNhGkcNnXEgoTL6IAXI",
@@ -29,14 +27,32 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
-const db = getFirestore(app);
 
 // Global State untuk User
 window.appUser = null;
-window.db = db;
-window.updateDoc = updateDoc;
-window.doc = doc;
-window.arrayUnion = arrayUnion;
+
+// ==========================================
+// OFFLINE / LOCALSTORAGE DATABASE MOCK
+// (Bypass Firestore billing requirement)
+// ==========================================
+window.db = "local";
+window.doc = function(db, collection, uid) { return uid; };
+window.arrayUnion = function(val) { return { _isUnion: true, val: val }; };
+window.updateDoc = async function(uid, updates) {
+  const localKey = 'astroquest_user_' + uid;
+  let data = JSON.parse(localStorage.getItem(localKey)) || {};
+  for (let key in updates) {
+    const updateVal = updates[key];
+    if (updateVal && updateVal._isUnion) {
+      if (!data[key]) data[key] = [];
+      if (!data[key].includes(updateVal.val)) data[key].push(updateVal.val);
+    } else {
+      data[key] = updateVal;
+    }
+  }
+  localStorage.setItem(localKey, JSON.stringify(data));
+  window.appUserData = data;
+};
 
 import bgTexture1 from './images/1.jpg';
 import bgTexture2 from './images/2.jpg';
@@ -1222,12 +1238,17 @@ function initPreview3D() {
   previewRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
   previewRenderer.setSize(container.clientWidth, container.clientHeight);
   previewRenderer.setPixelRatio(window.devicePixelRatio);
+  
+  // Fix canvas escaping modal due to global CSS
+  previewRenderer.domElement.style.position = 'relative';
+  previewRenderer.domElement.style.zIndex = '10';
+  
   container.appendChild(previewRenderer.domElement);
 
-  const light = new THREE.PointLight(0xffffff, 1.5);
+  const light = new THREE.PointLight(0xffffff, 2.5);
   light.position.set(5, 3, 5);
   previewScene.add(light);
-  previewScene.add(new THREE.AmbientLight(0x404040, 1.0));
+  previewScene.add(new THREE.AmbientLight(0xffffff, 1.5));
 
   function animate() {
     if (!isModalOpen) {
@@ -1284,12 +1305,17 @@ function selectPlanetPreview(name) {
 function bukaKoleksi() {
   const modal = document.getElementById('modal-koleksi');
   const grid = document.getElementById('collection-items');
+  const userNameEl = document.getElementById('koleksi-user-name');
+
+  if (userNameEl) {
+    userNameEl.innerText = window.appUserData ? window.appUserData.displayName : (window.appUser ? window.appUser.displayName : 'Guest Account');
+  }
 
   if (grid) {
     grid.innerHTML = ''; // Selalu bersihkan sebelum render
 
     if (!window.appUser || !window.appUserData) {
-      grid.innerHTML = '<div style="width:100%; text-align:center; padding: 20px; color: rgba(255,255,255,0.6);">Silakan login Google untuk melihat koleksi Anda.</div>';
+      grid.innerHTML = '<div style="grid-column: 1 / -1; width:100%; text-align:center; padding: 20px; color: rgba(255,255,255,0.6);">Silakan login Google untuk melihat koleksi Anda.</div>';
     } else {
       const userCollections = window.appUserData.collections || [];
       
@@ -1404,27 +1430,37 @@ function tutupModal(id) {
 // AUTHENTICATION & FIRESTORE LOGIC
 // ============================================================
 async function syncUserData(user) {
-  const userRef = doc(db, 'users', user.uid);
-  try {
-    const docSnap = await getDoc(userRef);
-    if (docSnap.exists()) {
-      window.appUserData = docSnap.data();
-      console.log("User data loaded from Firestore");
-    } else {
-      // User pertama kali login, buat default doc
-      const defaultData = {
-        displayName: user.displayName,
-        photoURL: user.photoURL,
-        collections: [],
-        achievements: []
-      };
-      await setDoc(userRef, defaultData);
-      window.appUserData = defaultData;
-      console.log("New user document created in Firestore");
-    }
-  } catch (e) {
-    console.error("Error syncing user data:", e);
+  const localKey = 'astroquest_user_' + user.uid;
+  let data = JSON.parse(localStorage.getItem(localKey));
+
+  if (data) {
+    console.log("User data loaded from localStorage");
+  } else {
+    data = {
+      displayName: user.displayName,
+      photoURL: user.photoURL,
+      collections: [],
+      achievements: []
+    };
+    console.log("New user document created in localStorage");
   }
+
+  let isUpdated = false;
+  if (!data.collections || data.collections.length === 0) {
+    data.collections = []; 
+    isUpdated = true;
+  }
+  if (!data.achievements || data.achievements.length === 0) {
+    data.achievements = ['explorer'];
+    isUpdated = true;
+  }
+
+  if (isUpdated || !localStorage.getItem(localKey)) {
+    localStorage.setItem(localKey, JSON.stringify(data));
+    console.log("Initial data saved to localStorage");
+  }
+
+  window.appUserData = data;
 }
 
 function loginGoogle() {
@@ -1532,10 +1568,9 @@ async function simpanProfil() {
       photoURL: newPhotoURL
     });
 
-    // Update Firestore Document
-    statusEl.innerText = "Memperbarui database...";
-    const userRef = doc(window.db, 'users', window.appUser.uid);
-    await updateDoc(userRef, {
+    // Update LocalStorage Document
+    statusEl.innerText = "Memperbarui database lokal...";
+    await window.updateDoc(window.appUser.uid, {
       displayName: newName,
       photoURL: newPhotoURL
     });

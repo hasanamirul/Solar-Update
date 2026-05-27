@@ -563,7 +563,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
   left: 30px !important;
   top: 50% !important;
   transform: translateY(-50%) !important;
-  z-index: 1000 !important;
+  z-index: 10000 !important;
   width: 360px !important;
 }
 .info-card {
@@ -571,7 +571,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
   -webkit-backdrop-filter: blur(35px);
   backdrop-filter: blur(35px);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 32px;
+  border-radius: 24px;
   overflow: hidden;
   box-shadow: 0 50px 100px rgba(0, 0, 0, 0.7);
   animation: infoSlideIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
@@ -588,7 +588,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
 }
 
 .info-header {
-  padding: 30px;
+  padding: 20px 25px;
   position: relative;
   border-bottom: 1px solid rgba(255, 255, 255, 0.15);
 }
@@ -601,15 +601,15 @@ input[type="range"]::-webkit-slider-thumb:hover {
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.15);
   color: white;
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: 0.3s;
-  font-size: 1rem;
+  font-size: 0.9rem;
 }
 .info-tutup:hover {
   background: rgba(239, 68, 68, 0.3);
@@ -619,24 +619,24 @@ input[type="range"]::-webkit-slider-thumb:hover {
 
 .info-planet-nama {
   font-family: "Orbitron";
-  font-size: 2.2rem;
+  font-size: 1.8rem;
   font-weight: 900;
-  margin-top: 18px;
+  margin-top: 15px;
   color: #fff;
   letter-spacing: 0.05em;
   text-transform: uppercase;
 }
 .info-badge-row {
   display: flex;
-  gap: 10px;
-  margin-top: 15px;
+  gap: 8px;
+  margin-top: 12px;
 }
 .info-badge {
   background: rgba(56, 189, 248, 0.2);
   border: 1px solid rgba(56, 189, 248, 0.4);
-  padding: 6px 14px;
+  padding: 5px 12px;
   border-radius: 100px;
-  font-size: 0.65rem;
+  font-size: 0.6rem;
   font-weight: 800;
   color: #38bdf8;
   text-transform: uppercase;
@@ -650,31 +650,31 @@ input[type="range"]::-webkit-slider-thumb:hover {
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 .stat-item {
-  padding: 20px;
+  padding: 15px 20px;
   border-right: 1px solid rgba(255, 255, 255, 0.1);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 .stat-value {
   font-family: "Orbitron";
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-weight: 800;
   color: #fff;
 }
 .stat-label {
-  font-size: 0.6rem;
+  font-size: 0.55rem;
   color: rgba(255, 255, 255, 0.4);
   text-transform: uppercase;
-  margin-top: 8px;
+  margin-top: 6px;
   letter-spacing: 0.1em;
   font-weight: 600;
 }
 
 .info-desc {
-  padding: 25px;
+  padding: 20px 25px;
 }
 .info-desc-text {
-  font-size: 0.9rem;
-  line-height: 1.8;
+  font-size: 0.85rem;
+  line-height: 1.6;
   color: rgba(255, 255, 255, 0.75);
 }
 
@@ -812,7 +812,8 @@ input[type="range"]::-webkit-slider-thumb:hover {
   background-size: cover;
   background-position: center;
   border: 2px solid rgba(255, 255, 255, 0.15);
-  border-radius: 20px;
+  border-radius: 50%;
+  overflow: hidden;
   cursor: pointer;
   transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
@@ -822,9 +823,9 @@ input[type="range"]::-webkit-slider-thumb:hover {
   box-shadow: 0 20px 40px rgba(56, 189, 248, 0.3);
 }
 .coll-item.active {
-  border-color: #38bdf8;
+  border-color: rgba(255, 255, 255, 0.5);
   border-width: 3px;
-  box-shadow: 0 0 30px rgba(56, 189, 248, 0.5);
+  box-shadow: none;
 }
 .coll-item.dummy {
   opacity: 0.6;
@@ -1116,7 +1117,8 @@ input[type="range"]::-webkit-slider-thumb:hover {
     gap: 8px;
   }
   .coll-item {
-    border-radius: 14px;
+    border-radius: 50%;
+    overflow: hidden;
   }
   #collection-preview {
     min-height: 220px !important;
@@ -1747,11 +1749,11 @@ body.camera-ar-aktif canvas {
   position: fixed;
   top: 90px;
   right: 25px;
-  z-index: 999;
+  z-index: 9999;
   opacity: 0;
   transform: translateY(-10px);
   pointer-events: none;
-  transition: opacity 0.4s ease, transform 0.4s ease, bottom 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 #btn-camera-ar-wrapper.aktif {
@@ -1763,12 +1765,15 @@ body.camera-ar-aktif canvas {
 #btn-camera-ar {
   display: flex;
   align-items: center;
+  justify-content: center;
+  width: 260px;
+  box-sizing: border-box;
   gap: 10px;
   padding: 14px 22px;
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.85), rgba(6, 182, 212, 0.85));
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(139, 92, 246, 0.2));
   -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  border: 1px solid rgba(56, 189, 248, 0.35);
   border-radius: 18px;
   color: #fff;
   font-family: 'Orbitron', sans-serif;
@@ -1779,7 +1784,7 @@ body.camera-ar-aktif canvas {
   cursor: pointer;
   transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
   box-shadow:
-    0 8px 32px rgba(16, 185, 129, 0.3),
+    0 8px 32px rgba(56, 189, 248, 0.2),
     0 0 0 1px rgba(255, 255, 255, 0.05) inset;
   position: relative;
   overflow: hidden;
@@ -1799,11 +1804,12 @@ body.camera-ar-aktif canvas {
 }
 
 #btn-camera-ar:hover {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.35), rgba(139, 92, 246, 0.35));
+  border-color: #38bdf8;
   transform: translateY(-4px) scale(1.05);
   box-shadow:
-    0 16px 48px rgba(16, 185, 129, 0.45),
-    0 0 20px rgba(6, 182, 212, 0.3);
-  border-color: rgba(255, 255, 255, 0.5);
+    0 16px 48px rgba(56, 189, 248, 0.35),
+    0 0 20px rgba(139, 92, 246, 0.2);
 }
 
 #btn-camera-ar:active {
@@ -1812,7 +1818,7 @@ body.camera-ar-aktif canvas {
 
 #btn-camera-ar .material-symbols-rounded {
   font-size: 1.3rem;
-  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.4));
+  filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.4));
 }
 
 /* Camera AR active state — HIDE the Camera AR button entirely */
@@ -1830,6 +1836,9 @@ body.camera-ar-aktif #btn-camera-ar-wrapper {
   z-index: 9999;
   display: none;
   align-items: center;
+  justify-content: center;
+  width: 260px;
+  box-sizing: border-box;
   gap: 10px;
   padding: 14px 22px;
   background: linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(139, 92, 246, 0.2));
@@ -1913,6 +1922,12 @@ body.camera-ar-aktif #btn-kembali-jelajah {
   #btn-camera-ar-wrapper {
     top: 90px;
     right: 25px;
+  }
+
+  /* Desktop dropdown overlap prevention */
+  body.kontrol-terbuka #btn-camera-ar-wrapper,
+  body.kontrol-terbuka #btn-kembali-jelajah {
+    top: 470px;
   }
 }
 

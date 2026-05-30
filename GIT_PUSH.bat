@@ -25,7 +25,7 @@ git add .
 
 echo 2. Melakukan commit...
 set /p commit_msg="Masukkan pesan commit (kosongkan untuk 'Fresh Start'): "
-if "%commit_msg%"=="" set commit_msg="Fresh Start"
+if "%commit_msg%"=="" set "commit_msg=Fresh Start"
 git commit -m "%commit_msg%"
 
 echo.
@@ -36,7 +36,7 @@ git pull origin main --rebase
 if %ERRORLEVEL% NEQ 0 (
     echo.
     echo [PERINGATAN] Gagal melakukan pull biasa / rebase.
-    echo Mencoba menggunakan penggabungan riwayat yang tidak terkait (unrelated histories)...
+    echo Mencoba menggunakan penggabungan riwayat yang tidak terkait ^(unrelated histories^)...
     git pull origin main --allow-unrelated-histories --no-edit
 )
 

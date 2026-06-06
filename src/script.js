@@ -993,7 +993,7 @@ function animate() {
 
   // Rotasi dan Panning
   if (isHandActive || Math.abs(handVelocity.x) > 0.0001 || Math.abs(handVelocity.y) > 0.0001) {
-    const rotateSpeed = 6.0; 
+    const rotateSpeed = 3.5; // Diperlambat agar tidak terlalu enteng
     const panSpeed = 35.0;    
 
     if (Math.abs(handVelocity.x) < 0.0001) handVelocity.x = 0;
@@ -1009,10 +1009,21 @@ function animate() {
             const angleY = handVelocity.y * rotateSpeed;
             
             camera.position.sub(controls.target);
+            
+            // Rotasi Kiri/Kanan
             camera.position.applyAxisAngle(new THREE.Vector3(0, 1, 0), angleX);
             
+            // Rotasi Atas/Bawah dengan perlindungan Glitch (Gimbal Lock)
             const rightAxis = new THREE.Vector3().crossVectors(camera.up, camera.position).normalize();
+            const tempPos = camera.position.clone();
             camera.position.applyAxisAngle(rightAxis, angleY);
+            
+            const polarAngle = camera.position.angleTo(new THREE.Vector3(0, 1, 0));
+            // Batasi sudut agar tidak melewati kutub utara/selatan tata surya (mentok)
+            if (polarAngle < 0.17 || polarAngle > 2.96) {
+              camera.position.copy(tempPos); // Batalkan rotasi vertikal jika mentok
+              handVelocity.y = 0; // Hentikan momentum vertikal secara instan
+            }
             
             camera.position.add(controls.target);
             camera.lookAt(controls.target);
@@ -1038,8 +1049,9 @@ function animate() {
     }
     
     // Terapkan Efek Momentum (Friction / Gesekan)
-    handVelocity.x *= 0.80; // Ditambah sedikit dari 0.70 agar lebih smooth
-    handVelocity.y *= 0.80;
+    // Diturunkan sedikit agar lebih berat dan cepat berhenti
+    handVelocity.x *= 0.75;
+    handVelocity.y *= 0.75;
   }
 
   controls.update();
@@ -1795,7 +1807,6 @@ function initHandTracking() {
         }
         
         handCurrentGesture = detectedGesture;
-        handPinchDistance = distance;
         
         const center = landmarks[9];
         const prevX = handPrevPos.x;
@@ -1831,6 +1842,7 @@ function initHandTracking() {
 }
 
 let isHandTrackingActive = false;
+window.currentFacingMode = null; // Menyimpan status kamera depan/belakang
 
 async function aktifkanHandTrackingLatarBelakang() {
   if (isHandTrackingActive) return;
@@ -1838,9 +1850,14 @@ async function aktifkanHandTrackingLatarBelakang() {
   try {
     if (!cameraStream) {
       const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      // Jika belum diset, atur default: mobile = environment (belakang), desktop = user (depan)
+      if (!window.currentFacingMode) {
+        window.currentFacingMode = isMobile ? 'environment' : 'user';
+      }
+      
       const constraints = {
         video: {
-          facingMode: isMobile ? { ideal: 'environment' } : 'user',
+          facingMode: { ideal: window.currentFacingMode },
           width: { ideal: 1920 },
           height: { ideal: 1080 }
         },
@@ -1872,6 +1889,30 @@ function nonaktifkanHandTrackingLatarBelakang() {
     cameraStream = null;
   }
   if (video) video.srcObject = null;
+}
+
+// Fungsi untuk menukar kamera depan dan belakang
+window.toggleKameraDepanBelakang = async function() {
+  // Hanya tukar jika hand tracking sudah menyala/izin diberikan
+  if (cameraStream) {
+    cameraStream.getTracks().forEach(track => track.stop());
+    cameraStream = null;
+  }
+  
+  // Tukar state
+  if (window.currentFacingMode === 'user') {
+    window.currentFacingMode = 'environment';
+  } else {
+    window.currentFacingMode = 'user';
+  }
+  
+  // Matikan status sementara agar fungsi aktifkan bisa jalan lagi
+  isHandTrackingActive = false;
+  
+  // Nyalakan ulang kamera dengan kamera yang baru
+  await aktifkanHandTrackingLatarBelakang();
+  
+  console.log("Kamera ditukar ke:", window.currentFacingMode);
 }
 
 function processHandTrackingFrame() {

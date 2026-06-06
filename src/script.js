@@ -965,12 +965,37 @@ function animate() {
   }
 
   // ****** HAND TRACKING ACTIONS ******
+  const currentCameraDist = camera.position.distanceTo(controls.target);
+
+  // Auto Zoom In saat dicubit, Zoom Out saat dilepas
+  if (handCurrentGesture === 'pinch') {
+    if (!isPinchingZoom) {
+      isPinchingZoom = true;
+      baseCameraDistance = currentCameraDist;
+    }
+    // Mendekat hingga 30% dari jarak normal
+    const targetDist = Math.max(5, baseCameraDistance * 0.3);
+    const direction = new THREE.Vector3().subVectors(camera.position, controls.target).normalize();
+    const newDist = currentCameraDist + (targetDist - currentCameraDist) * 0.08;
+    camera.position.copy(controls.target).add(direction.multiplyScalar(newDist));
+  } else if (isPinchingZoom) {
+    // Dilepas, kembali ke jarak awal
+    const targetDist = baseCameraDistance;
+    const direction = new THREE.Vector3().subVectors(camera.position, controls.target).normalize();
+    const newDist = currentCameraDist + (targetDist - currentCameraDist) * 0.08;
+    camera.position.copy(controls.target).add(direction.multiplyScalar(newDist));
+    
+    // Berhenti lerping jika sudah sampai
+    if (Math.abs(newDist - targetDist) < 1) {
+      isPinchingZoom = false;
+    }
+  }
+
+  // Rotasi dan Panning
   if (isHandActive || Math.abs(handVelocity.x) > 0.0001 || Math.abs(handVelocity.y) > 0.0001) {
     const rotateSpeed = 6.0; 
     const panSpeed = 35.0;    
-    const zoomSpeed = 120.0;  
 
-    // Hentikan sepenuhnya jika sangat kecil (mencegah drift)
     if (Math.abs(handVelocity.x) < 0.0001) handVelocity.x = 0;
     if (Math.abs(handVelocity.y) < 0.0001) handVelocity.y = 0;
 
@@ -1007,22 +1032,14 @@ function animate() {
           }
           break;
         case 'pinch':
-          if (handVelocity.y !== 0) {
-            const zoomAmount = handVelocity.y * zoomSpeed;
-            const direction = new THREE.Vector3().subVectors(camera.position, controls.target).normalize();
-            const currentDist = camera.position.distanceTo(controls.target);
-            
-            const newDist = Math.max(5, Math.min(1000, currentDist + zoomAmount));
-            camera.position.copy(controls.target).add(direction.multiplyScalar(newDist));
-          }
+          // Ditangani di atas
           break;
       }
     }
     
     // Terapkan Efek Momentum (Friction / Gesekan)
-    // 0.70 memberikan efek lebih berat dan cepat berhenti
-    handVelocity.x *= 0.70;
-    handVelocity.y *= 0.70;
+    handVelocity.x *= 0.80; // Ditambah sedikit dari 0.70 agar lebih smooth
+    handVelocity.y *= 0.80;
   }
 
   controls.update();
@@ -1689,9 +1706,10 @@ let isHandActive = false;
 let handCurrentGesture = 'none';
 let handVelocity = { x: 0, y: 0 };
 let handPrevPos = { x: 0, y: 0 };
-let handPinchDistance = 0;
 let handCanvas = null;
 let handCtx = null;
+let baseCameraDistance = -1;
+let isPinchingZoom = false;
 
 function initHandTracking() {
   if (arHandsInstance) return;
@@ -1787,9 +1805,9 @@ function initHandTracking() {
           handPrevPos.x = center.x;
           handPrevPos.y = center.y;
         } else {
-          // Low-pass filter (0.3) untuk menghaluskan noise dari AI MediaPipe
-          const smoothX = prevX + (center.x - prevX) * 0.3;
-          const smoothY = prevY + (center.y - prevY) * 0.3;
+          // Low-pass filter (0.15) untuk sangat menghaluskan noise dari AI MediaPipe
+          const smoothX = prevX + (center.x - prevX) * 0.15;
+          const smoothY = prevY + (center.y - prevY) * 0.15;
           
           // Tambahkan pergerakan ke kecepatan (Velocity)
           handVelocity.x += -(smoothX - prevX);

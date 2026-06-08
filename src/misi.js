@@ -87,7 +87,7 @@ function initMisiUI() {
         <p>Apakah Anda yakin ingin menghentikan kuis ini? Progres Anda akan hilang.</p>
         <div class="misi-confirm-btns">
           <button class="confirm-btn confirm-btn-yes" onclick="gameOver()">Ya, Menyerah</button>
-          <button class="confirm-btn confirm-btn-no" onclick="lanjutKuis()">Lanjut Quiz</button>
+          <button class="confirm-btn confirm-btn-no" onclick="lanjutKuis()">Lanjut Kuis</button>
         </div>
       </div>
     </div>
@@ -96,7 +96,7 @@ function initMisiUI() {
     <div class="misi-modal" id="modal-akhir" style="display:none;">
       <div class="kuis-card end-card">
         <div class="kuis-header-glow"></div>
-        <h2 class="end-title" id="end-title">CONGRATULATIONS!</h2>
+        <h2 class="end-title" id="end-title">SELAMAT!</h2>
         <p id="end-desc" style="color: rgba(255,255,255,0.7); margin-bottom: 20px;"></p>
         <div class="koleksi-grid" id="end-koleksi"></div>
         <button class="end-btn" onclick="tutupMisi()">
@@ -290,7 +290,7 @@ function cekJawaban(benar, pKey, btnEl, correctVal) {
 window.gameOver = function() {
   document.getElementById('modal-konfirmasi').style.display = 'none';
   document.getElementById('modal-akhir').style.display = 'flex';
-  document.getElementById('end-title').textContent = 'GAME OVER';
+  document.getElementById('end-title').textContent = 'PERMAINAN BERAKHIR';
   document.getElementById('end-title').style.color = '#ef4444';
   document.getElementById('end-title').style.background = 'none';
   document.getElementById('end-title').style.webkitTextFillColor = '#ef4444';
@@ -302,7 +302,7 @@ function menang() {
   const rewardPlanets = ['Jupiter', 'Saturn', 'Mars', 'Earth'];
   const reward = rewardPlanets[Math.floor(Math.random() * rewardPlanets.length)];
   
-  const userName = window.appUser ? window.appUser.displayName : 'Guest';
+  const userName = window.appUser ? window.appUser.displayName : 'Akun Tamu';
 
   // Sinkronisasi ke Firestore jika login
   if (window.appUser && window.appUserData) {
@@ -335,18 +335,18 @@ function menang() {
   }
 
   document.getElementById('modal-akhir').style.display = 'flex';
-  document.getElementById('end-title').textContent = 'CONGRATULATIONS!';
+  document.getElementById('end-title').textContent = 'SELAMAT!';
   document.getElementById('end-title').style.background = 'linear-gradient(135deg, #fbbf24, #f59e0b)';
   document.getElementById('end-title').style.webkitBackgroundClip = 'text';
   
   const saveStatusText = window.appUser ? 
     `<span style="font-size:0.75rem; color:rgba(255,255,255,0.5);">Planet ini telah ditambahkan ke KOLEKSI Anda.</span>` : 
-    `<span style="font-size:0.75rem; color:#ef4444; font-weight:bold;">Planet TIDAK disimpan karena Anda bermain sebagai Guest. Silakan Login Google dulu!</span>`;
+    `<span style="font-size:0.75rem; color:#ef4444; font-weight:bold;">Planet TIDAK disimpan karena Anda bermain sebagai Akun Tamu. Silakan Masuk Google dulu!</span>`;
 
   document.getElementById('end-desc').innerHTML = `Luar Biasa, ${userName}! Anda telah menaklukkan seluruh kuis <strong>ASTRO QUEST</strong>!<br><br>
     <div style="background:rgba(251,191,36,0.1); padding:15px; border-radius:12px; border:1px solid rgba(251,191,36,0.2);">
       <span class="material-symbols-rounded" style="color:#fbbf24; display:block; font-size:2rem; margin-bottom:10px;">auto_awesome</span>
-      REWARD UNLOCKED: <strong>Planet ${reward}</strong><br>
+      HADIAH TERBUKA: <strong>Planet ${reward}</strong><br>
       ${saveStatusText}
     </div>`;
   

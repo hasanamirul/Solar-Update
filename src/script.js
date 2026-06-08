@@ -1405,7 +1405,7 @@ function bukaKoleksi() {
   const userNameEl = document.getElementById('koleksi-user-name');
 
   if (userNameEl) {
-    userNameEl.innerText = window.appUserData ? window.appUserData.displayName : (window.appUser ? window.appUser.displayName : 'Guest Account');
+    userNameEl.innerText = window.appUserData ? window.appUserData.displayName : (window.appUser ? window.appUser.displayName : 'Akun Tamu');
   }
 
   if (grid) {
@@ -1463,13 +1463,13 @@ function bukaPencapaian() {
       const userAchs = window.appUserData.achievements || [];
       
       const allAchs = [
-        { id: 'explorer', t: 'Solar Explorer', d: 'Telah login untuk pertama kalinya.', i: 'explore' },
-        { id: 'quiz_master', t: 'Quiz Master', d: 'Menjawab 50+ kuis dengan benar.', i: 'school' },
-        { id: 'first_discovery', t: 'First Discovery', d: 'Mendapatkan planet pertama dari kuis.', i: 'auto_awesome' },
-        { id: 'speed_runner', t: 'Speed Runner', d: 'Menyelesaikan kuis dalam waktu < 1 menit.', i: 'timer' },
-        { id: 'star_gazer', t: 'Star Gazer', d: 'Melihat detail Matahari selama 5 menit.', i: 'wb_sunny' },
-        { id: 'moon_walker', t: 'Moon Walker', d: 'Menemukan semua satelit alami di Bumi.', i: 'nightlight' },
-        { id: 'interstellar', t: 'Interstellar', d: 'Mencapai skor sempurna di Misi Hard.', i: 'rocket_launch' }
+        { id: 'explorer', t: 'Penjelajah Tata Surya', d: 'Telah login untuk pertama kalinya.', i: 'explore' },
+        { id: 'quiz_master', t: 'Master Kuis', d: 'Menjawab 50+ kuis dengan benar.', i: 'school' },
+        { id: 'first_discovery', t: 'Penemuan Pertama', d: 'Mendapatkan planet pertama dari kuis.', i: 'auto_awesome' },
+        { id: 'speed_runner', t: 'Pelari Cepat', d: 'Menyelesaikan kuis dalam waktu < 1 menit.', i: 'timer' },
+        { id: 'star_gazer', t: 'Pengamat Bintang', d: 'Melihat detail Matahari selama 5 menit.', i: 'wb_sunny' },
+        { id: 'moon_walker', t: 'Penjelajah Bulan', d: 'Menemukan semua satelit alami di Bumi.', i: 'nightlight' },
+        { id: 'interstellar', t: 'Antarbintang', d: 'Mencapai skor sempurna di Misi Hard.', i: 'rocket_launch' }
       ];
 
       // Beri achievement dasar jika baru login pertama kali
@@ -1531,7 +1531,7 @@ async function syncUserData(user) {
   let data = JSON.parse(localStorage.getItem(localKey));
 
   if (data) {
-    console.log("User data loaded from localStorage");
+    console.log("Data pengguna dimuat dari localStorage");
   } else {
     data = {
       displayName: user.displayName,
@@ -1539,7 +1539,7 @@ async function syncUserData(user) {
       collections: [],
       achievements: []
     };
-    console.log("New user document created in localStorage");
+    console.log("Dokumen pengguna baru dibuat di localStorage");
   }
 
   let isUpdated = false;
@@ -1554,7 +1554,7 @@ async function syncUserData(user) {
 
   if (isUpdated || !localStorage.getItem(localKey)) {
     localStorage.setItem(localKey, JSON.stringify(data));
-    console.log("Initial data saved to localStorage");
+    console.log("Data awal disimpan ke localStorage");
   }
 
   window.appUserData = data;
@@ -1563,20 +1563,20 @@ async function syncUserData(user) {
 function loginGoogle() {
   signInWithPopup(auth, provider)
     .then((result) => {
-      console.log("Logged in as:", result.user.displayName);
+      console.log("Masuk sebagai:", result.user.displayName);
     }).catch((error) => {
-      console.error("Login failed:", error);
+      console.error("Login gagal:", error);
       alert("Gagal login: " + error.code + "\n" + error.message);
     });
 }
 
 function logout() {
   signOut(auth).then(() => {
-    console.log("Logged out");
+    console.log("Berhasil keluar");
     window.appUser = null;
     window.appUserData = null;
   }).catch((error) => {
-    console.error("Logout failed:", error);
+    console.error("Gagal keluar:", error);
   });
 }
 
@@ -1608,7 +1608,7 @@ function updateAuthUI(user) {
       profilePic.innerHTML = 'G';
       profilePic.style.background = '#8b5cf6';
     }
-    if (profileName) profileName.innerText = 'Guest Account';
+    if (profileName) profileName.innerText = 'Akun Tamu';
     if (btnLogin) btnLogin.style.display = 'inline-block';
     if (btnEdit) btnEdit.style.display = 'none';
   }

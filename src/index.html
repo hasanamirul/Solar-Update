@@ -60,7 +60,7 @@
           <span class="material-symbols-rounded">explore</span> JELAJAH AR
         </button>
         <button class="lp-btn lp-btn-secondary" onclick="mulaiMisi()">
-          <span class="material-symbols-rounded">quiz</span> MISI QUIS
+          <span class="material-symbols-rounded">quiz</span> MISI KUIS
         </button>
         <button class="lp-btn lp-btn-secondary" onclick="bukaKoleksi()">
           <span class="material-symbols-rounded">inventory_2</span> KOLEKSI
@@ -78,7 +78,7 @@
         <div id="auth-guest">
           <button class="google-btn" onclick="loginGoogle()">
             <img src="https://developers.google.com/static/identity/images/g-logo.png" alt="Google">
-            <span>Sign in with Google</span>
+            <span>Masuk dengan Google</span>
           </button>
         </div>
         <div id="auth-user">
@@ -87,10 +87,10 @@
               <img id="user-photo" src="" alt="Profile">
             </div>
             <div class="user-info-mini">
-              <span id="user-name">User Name</span>
-              <span class="user-status">Online</span>
+              <span id="user-name">Nama Pengguna</span>
+              <span class="user-status">Aktif</span>
             </div>
-            <button class="logout-btn-mini" onclick="logout()" title="Logout">
+            <button class="logout-btn-mini" onclick="logout()" title="Keluar">
               <span class="material-symbols-rounded">logout</span>
             </button>
           </div>
@@ -247,8 +247,8 @@
       <div class="collection-list-wrapper">
         <div class="achievement-card">
           <div class="user-info">
-            <div class="user-name" id="koleksi-user-name">Guest Account</div>
-            <div class="user-tier">Solar Explorer</div>
+            <div class="user-name" id="koleksi-user-name">Akun Tamu</div>
+            <div class="user-tier">Penjelajah Tata Surya</div>
           </div>
         </div>
         <div class="collection-grid" id="collection-items">
@@ -298,8 +298,8 @@
         <div class="profile-edit">
           <div class="user-avatar-placeholder" id="profile-pic">G</div>
           <div>
-            <div class="guest-name" id="display-name-text">Guest Account</div>
-            <button class="btn-small" id="btn-login-google" onclick="loginGoogle()">LOGIN GOOGLE</button>
+            <div class="guest-name" id="display-name-text">Akun Tamu</div>
+            <button class="btn-small" id="btn-login-google" onclick="loginGoogle()">MASUK GOOGLE</button>
             <button class="btn-small" id="btn-edit-profile" onclick="toggleEditProfile()" style="display:none; margin-top:5px;">EDIT PROFIL</button>
           </div>
         </div>
@@ -324,22 +324,22 @@
         <div class="section-title">AUDIO</div>
         <div class="volume-control-group">
           <div class="volume-header">
-            <label for="vol-back">Backsound</label>
+            <label for="vol-back">Suara Latar</label>
             <span id="label-vol-back">50%</span>
           </div>
-          <input type="range" id="vol-back" title="Volume Backsound" class="volume-slider" min="0" max="1" step="0.01" value="0.5" oninput="updateVolume('back')">
+          <input type="range" id="vol-back" title="Volume Suara Latar" class="volume-slider" min="0" max="1" step="0.01" value="0.5" oninput="updateVolume('back')">
         </div>
         <div class="volume-control-group">
           <div class="volume-header">
-            <label for="vol-click">Click Sound</label>
+            <label for="vol-click">Suara Klik</label>
             <span id="label-vol-click">70%</span>
           </div>
-          <input type="range" id="vol-click" title="Volume Click Sound" class="volume-slider" min="0" max="1" step="0.01" value="0.7" oninput="updateVolume('click')">
+          <input type="range" id="vol-click" title="Volume Suara Klik" class="volume-slider" min="0" max="1" step="0.01" value="0.7" oninput="updateVolume('click')">
         </div>
       </div>
       <div class="app-info-footer">
         <div class="version-text">Versi 2.0.4 | &copy; 2026 Solar System 3D</div>
-        <button class="logout-full-btn" onclick="logout(); location.reload();">LOGOUT</button>
+        <button class="logout-full-btn" onclick="logout(); location.reload();">KELUAR</button>
       </div>
     </div>
   </div>
@@ -358,9 +358,9 @@
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('/sw.js')
         .then((registration) => {
-          console.log('ServiceWorker registration successful with scope: ', registration.scope);
+          console.log('Pendaftaran ServiceWorker berhasil dengan cakupan: ', registration.scope);
         }, (error) => {
-          console.log('ServiceWorker registration failed: ', error);
+          console.log('Pendaftaran ServiceWorker gagal: ', error);
         });
     });
   }
